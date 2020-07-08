@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>TasksApp</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+	<!--Body-->
+	<section class="left">
+		<!--Everything in the left panel-->
+		<section class="appbar"><small class="ml-2">VueJS Tasks Application</small></section>
+
+		<!--User Profile Panle-->
+		<section class="userprofile">
+			<img src="https://bit.ly/2USxOlM" id="profileicon">
+			<div class="profiledetails ml-2">
+				<h6>Manas Hejmadi</h6>
+				<small>manashejmadi@gmail.com</small>
+			</div>
+		</section>
+
+		<!--Control Panel-->
+		<section class="controlpanel">
+			<div class="control sg" id="alltasks" onclick="app.showAllTasks();">
+				<img src="images/alltasks.png" class="controlicon mr-1">
+				All Tasks
+			</div>
+			<div class="control sg" id="activetasks" onclick="app.showActiveTasks();">
+				<img src="images/activetasks.png" class="controlicon mr-1">
+				Active Tasks
+			</div>
+			<div class="control sg" id="completedtasks" onclick="app.showCompletedTasks();">
+				<img src="images/completedtasks.png" class="controlicon mr-1">
+				Completed Tasks
+			</div>
+			<div class="control sg" id="cleartasks" onclick="(confirm('Are you sure you want to delete all tasks?')) ? app.clearTasks() : console.log('delete permission denied!');">
+				<img src="images/cleartasks.png" class="controlicon mr-1">
+				Clear Tasks
+			</div>
+			<div class="control sg" id="restoretasks" onclick="(confirm('Are you sure you want to restore all deleted tasks?')) ? app.restoreDeletedTasks() : console.log('restore permission denied!');">
+				<img src="images/restoretasks.png" class="controlicon mr-1">
+				Restore Deleted Tasks
+			</div>
+		</section>
+
+		<!--Filter Tasks Panel-->
+		<section class="btn-group dropright fitersection ml-2 ">
+			<button type="button" class="btn btn-outline-secondary dropdown-toggle px-5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				Filter Tasks by Priority
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#" onclick="app.filterByPriority('No')">Show All</a>
+				<a class="dropdown-item" href="#" onclick="app.filterByPriority('Low')">Low Priority</a>
+				<a class="dropdown-item" href="#" onclick="app.filterByPriority('Medium')">Medium Priority</a>
+				<a class="dropdown-item" href="#" onclick="app.filterByPriority('High')">High Priority</a>
+			</div>
+		</section>
+
+		<!--TaskList Selection Panel-->
+		<section class="listcontrolgroup">
+			<div class="control sr" onclick="app.addNewTaskListItem();">
+				<img src="images/add.png" class="controlicon mr-1">
+				New List
+			</div>
+			<!--TaskList Listbox-->
+			<section class="tlistsection">
+				<ul id="lists">
+					<!--List Objects go here-->
+				</ul>
+			</section>
+		</section>
+	</section>
+
+	<section class="right">
+		<!--Everything in the right panel-->
+		<!--Header Panel-->
+		<header>
+			<h2 class="display-3" id="ln">My Tasks</h2>
+			<h5>Tuesday, June 19 
+				<span class="ml-2 badge badge-dark p-2 text-muted" id="listnotifier"></span>
+				<span class="ml-2 badge badge-dark p-2 text-muted" id="notifier"></span>
+			</h5>
+		</header>
+
+		<!--Tasks Display Section-->
+		<section class="tasks">
+			<ul class="list-group" id="taskslist">
+				<!--Task Objects go here-->
+			</ul>
+		</section>
+
+		<!--Add Task Button-->
+		<section id="addTaskButton" data-toggle="modal" data-target="#addTaskModal">
+			<img src="images/add.png" class="mr-3" style="height:24px; width:24px;">
+			Add a task
+		</section>
+
+	</section>
+
+
+	<!--Add Task Modal-->
+	<div class="modal fade"
+		id="addTaskModal"
+		tabindex="-1"
+		role="dialog"
+		aria-labelledby="TaskModalTitle"
+		aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document" style="margin-left:550px;">
+			<div class="modal-content modal-sm bg-dark text-light">
+				<div class="modal-header">
+					<h5 class="modal-title" id="TaskModalTitle">Add New Task</h5>
+					<button type="button" class="close" style="color: white;" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</div>
+				<div class="modal-body">
+					<input type="text" id="tasknamebox" class="form-control text-light bg-dark" placeholder="Enter Task Name" onclick="this.value='';">
+					<select name="pbox" id="pbox" class="form-control mt-2 text-light bg-dark">
+						<option value="" default>Choose Task Priority</option>
+						<option value="Low">Low</option>
+						<option value="Medium">Medium</option>
+						<option value="High">High</option>
+					</select>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" onclick="app.addTask();" data-dismiss="modal">Create Task</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--Body-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.10.1/Sortable.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+	<script src="runner.js"></script>
+</body>
+</html>
